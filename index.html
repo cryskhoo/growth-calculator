@@ -877,17 +877,20 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
 .tl-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}.tl-sum div{background:var(--paper,#fffdf8);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:2px}.tl-sum b{font:800 1.3rem/1 var(--f-num)}.tl-sum small{font-size:.74rem;color:var(--muted);font-weight:700}
 body.persona-vl img[alt="ck logo"]{visibility:hidden}
 
+
 /* ===== Desert analogy ===== */
 .ds-wrap{display:grid;gap:12px}.ds-scene{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#e9d9bd}.ds-svg{display:block;width:100%;height:auto}
 .ds-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.ds-step{font:inherit;text-align:left;background:var(--paper,#fffdf8);border:2px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:2px;cursor:pointer;color:var(--ink)}.ds-step b{font-family:var(--f-title);font-size:.95rem}.ds-step span{font-size:.78rem;color:var(--muted)}.ds-step.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--paper,#fffdf8))}.ds-step.cool.on{border-color:#5aa7d6;background:#eaf4fb}.ds-step.money.on{border-color:var(--gold);background:#fbf4de}
 .ds-say{background:#29251E;color:#f3eadb;border-radius:14px;padding:16px 18px;font-size:1.02rem;line-height:1.45;min-height:3.2em}.ds-say b{color:#f2c94c}
-.ds-legs rect{transform-box:fill-box;transform-origin:top center;animation:dsleg 1.1s ease-in-out infinite alternate}.ds-legs rect:nth-child(2),.ds-legs rect:nth-child(4){animation-delay:-.55s}
-.ds-walkers{animation:dsbob 1.1s ease-in-out infinite alternate}.ds-leg{transform-box:fill-box;transform-origin:top center;animation:dsleg 1.1s ease-in-out infinite alternate}.ds-leg.r{animation-delay:-.55s}
+.ds-legs rect,.ds-leg{transform-box:fill-box;transform-origin:top center;animation:dsleg 1.1s ease-in-out infinite alternate}.ds-legs rect:nth-child(2),.ds-legs rect:nth-child(4),.ds-leg.r{animation-delay:-.55s}
+.ds-body{transform-box:fill-box;transform-origin:bottom center;transition:transform .5s}.ds-scene.thirsty .ds-body{transform:rotate(6deg) translateY(4px)}.ds-scene.thirsty .ds-mouth{d:path("M-5 -36 q 5 4 10 0")}
+.ds-sweat{opacity:0;transition:opacity .4s}.ds-scene.thirsty .ds-sweat{opacity:1}.ds-sweat path{transform-box:fill-box;animation:dssweat 1.4s ease-in infinite}.ds-sweat path:nth-child(2){animation-delay:-.5s}.ds-sweat path:nth-child(3){animation-delay:-.9s}
+.ds-walkers{animation:dsbob 1.1s ease-in-out infinite alternate}.ds-scene.route .ds-walkers{animation:dswalk 18s linear infinite}.ds-scene.route .ds-coolers{opacity:1}
 .ds-heat path{animation:dsheat 3s ease-in-out infinite}.ds-sun circle{transform-box:fill-box;transform-origin:center;animation:dssun 4s ease-in-out infinite alternate}
-.ds-water{transition:height .6s,y .6s}.ds-coolers{transition:opacity .6s}
-@keyframes dsleg{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}@keyframes dsbob{from{transform:translate(300px,330px)}to{transform:translate(300px,326px)}}@keyframes dsheat{0%,100%{transform:translateX(0);opacity:.3}50%{transform:translateX(12px);opacity:.7}}@keyframes dssun{from{transform:scale(1)}to{transform:scale(1.06)}}
-.ds-drop{animation:dsdrop 1.6s linear infinite}@keyframes dsdrop{0%{transform:translateY(-40px);opacity:0}15%{opacity:1}100%{transform:translateY(120px);opacity:0}}
-@media(prefers-reduced-motion:reduce){.ds-legs rect,.ds-walkers,.ds-leg,.ds-heat path,.ds-sun circle,.ds-drop{animation:none}}
+.ds-coolers{transition:opacity .6s}.ds-cool-fill{animation:dsfill 3.5s ease-in-out infinite}
+@keyframes dsleg{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}@keyframes dsbob{from{transform:translate(300px,330px)}to{transform:translate(300px,326px)}}@keyframes dswalk{0%{transform:translate(40px,330px)}100%{transform:translate(880px,330px)}}
+@keyframes dsheat{0%,100%{transform:translateX(0);opacity:.3}50%{transform:translateX(12px);opacity:.7}}@keyframes dssun{from{transform:scale(1)}to{transform:scale(1.06)}}@keyframes dssweat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(14px);opacity:0}}@keyframes dsfill{0%,20%{height:4px;y:14px}60%,100%{height:18px;y:0}}
+@media(prefers-reduced-motion:reduce){.ds-legs rect,.ds-leg,.ds-walkers,.ds-heat path,.ds-sun circle,.ds-sweat path,.ds-cool-fill{animation:none}}
 </style>
 
 <div class="scene" id="scene" aria-hidden="true">
@@ -2058,38 +2061,43 @@ render();
   <h2>Imagine you are walking through a desert that never ends.</h2>
   <p class="lede">You don't know where the end is. The only question is how you drink the water you carry. Tap each step as we talk.</p>
   <div class="ds-wrap">
-    <div class="ds-scene" id="ds-scene">
-      <svg viewBox="0 0 1000 420" class="ds-svg" role="img" aria-label="Two people walking through a desert">
-        <defs>
-          <linearGradient id="ds-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9d9bd"/><stop offset="1" stop-color="#f4e7cf"/></linearGradient>
-          <linearGradient id="ds-sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9c08f"/><stop offset="1" stop-color="#c2a36e"/></linearGradient>
-          <linearGradient id="ds-sand2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cbb07a"/><stop offset="1" stop-color="#b9975f"/></linearGradient>
-        </defs>
-        <rect width="1000" height="420" fill="url(#ds-sky)"/>
-        <g class="ds-sun"><circle cx="840" cy="78" r="46" fill="#e8b85a"/><circle cx="840" cy="78" r="60" fill="#e8b85a" opacity=".18"/><circle cx="840" cy="78" r="78" fill="#e8b85a" opacity=".08"/></g>
-        <path d="M0 300 Q 180 240 360 290 T 720 285 T 1000 300 L1000 420 L0 420Z" fill="#d6bc88"/>
-        <path d="M0 330 Q 220 290 440 325 T 1000 330 L1000 420 L0 420Z" fill="url(#ds-sand)"/>
-        <path d="M0 370 Q 300 340 600 372 T 1000 365 L1000 420 L0 420Z" fill="url(#ds-sand2)"/>
-        <g class="ds-heat"><path d="M120 250 q10 -8 20 0 t20 0 t20 0" stroke="#fff" stroke-opacity=".4" fill="none" stroke-width="2"/><path d="M560 262 q10 -8 20 0 t20 0 t20 0" stroke="#fff" stroke-opacity=".4" fill="none" stroke-width="2"/></g>
-        <g class="ds-cactus" transform="translate(900 300)"><rect x="-8" y="-70" width="16" height="80" rx="8" fill="#6f8f5a"/><rect x="-30" y="-50" width="12" height="36" rx="6" fill="#6f8f5a"/><rect x="-30" y="-24" width="24" height="10" rx="5" fill="#6f8f5a"/><rect x="18" y="-58" width="12" height="40" rx="6" fill="#6f8f5a"/><rect x="6" y="-28" width="24" height="10" rx="5" fill="#6f8f5a"/></g>
-        <g class="ds-camel" transform="translate(640 318) scale(.9)">
-          <ellipse cx="0" cy="0" rx="46" ry="22" fill="#b98a4e"/><path d="M-28 -14 q 14 -34 34 -8 q 10 -30 30 -10 q 6 10 -4 20" fill="#b98a4e"/>
-          <path d="M40 -6 q 20 -10 26 -34 q 4 -14 16 -12 q 8 2 6 12 q -2 8 -12 8 q -4 20 -12 32" fill="#b98a4e" stroke="#a5773d" stroke-width="2"/>
-          <g class="ds-legs"><rect x="-34" y="10" width="8" height="36" rx="4" fill="#a5773d"/><rect x="-14" y="12" width="8" height="34" rx="4" fill="#a5773d"/><rect x="10" y="12" width="8" height="34" rx="4" fill="#a5773d"/><rect x="30" y="10" width="8" height="36" rx="4" fill="#a5773d"/></g>
-          <circle cx="78" cy="-40" r="2.2" fill="#3b2a14"/>
+    <div class="ds-scene">
+      <svg viewBox="0 0 1000 440" class="ds-svg" role="img" aria-label="Two people walking through a desert">
+        <defs><linearGradient id="ds-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9d9bd"/><stop offset="1" stop-color="#f4e7cf"/></linearGradient><linearGradient id="ds-sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9c08f"/><stop offset="1" stop-color="#c2a36e"/></linearGradient></defs>
+        <rect width="1000" height="440" fill="url(#ds-sky)"/>
+        <g class="ds-sun"><circle cx="860" cy="80" r="44" fill="#e8b85a"/><circle cx="860" cy="80" r="60" fill="#e8b85a" opacity=".16"/><circle cx="860" cy="80" r="80" fill="#e8b85a" opacity=".07"/></g>
+        <path d="M0 300 Q 180 240 360 290 T 720 285 T 1000 300 L1000 440 L0 440Z" fill="#d6bc88"/>
+        <path d="M0 335 Q 220 295 440 330 T 1000 335 L1000 440 L0 440Z" fill="url(#ds-sand)"/>
+        <path id="ds-path" d="M-40 372 Q 250 356 500 370 T 1040 368" stroke="#b9975f" stroke-width="26" fill="none" stroke-linecap="round" opacity=".55"/>
+        <g class="ds-heat"><path d="M120 250 q10 -8 20 0 t20 0 t20 0" stroke="#fff" stroke-opacity=".45" fill="none" stroke-width="2"/><path d="M560 262 q10 -8 20 0 t20 0 t20 0" stroke="#fff" stroke-opacity=".45" fill="none" stroke-width="2"/></g>
+        <g transform="translate(930 300)"><rect x="-8" y="-70" width="16" height="80" rx="8" fill="#6f8f5a"/><rect x="-30" y="-50" width="12" height="36" rx="6" fill="#6f8f5a"/><rect x="-30" y="-24" width="24" height="10" rx="5" fill="#6f8f5a"/><rect x="18" y="-58" width="12" height="40" rx="6" fill="#6f8f5a"/><rect x="6" y="-28" width="24" height="10" rx="5" fill="#6f8f5a"/></g>
+        <g class="ds-camel" transform="translate(700 318)">
+          <path d="M-50 -4 q 0 -26 24 -26 q 10 -26 30 -6 q 18 -22 34 0 q 14 6 14 20 q 0 18 -24 20 h-56 q -22 0 -22 -8z" fill="#b98a4e"/>
+          <path d="M50 -2 q 18 -4 24 -30 q 6 -20 20 -18 q 10 2 8 12 q -2 8 -12 10 q -2 24 -16 36z" fill="#b98a4e"/>
+          <ellipse cx="92" cy="-46" rx="11" ry="7" fill="#b98a4e"/><circle cx="96" cy="-48" r="1.8" fill="#3b2a14"/>
+          <g class="ds-legs"><rect x="-44" y="6" width="8" height="36" rx="4" fill="#a5773d"/><rect x="-24" y="8" width="8" height="34" rx="4" fill="#a5773d"/><rect x="14" y="8" width="8" height="34" rx="4" fill="#a5773d"/><rect x="34" y="6" width="8" height="36" rx="4" fill="#a5773d"/></g>
         </g>
-        <g class="ds-walkers" transform="translate(300 330)">
-          <g class="ds-person ds-uncle"><ellipse cx="0" cy="46" rx="22" ry="5" fill="#8d7340" opacity=".35"/><rect x="-14" y="-30" width="28" height="44" rx="9" fill="#5b0302"/><circle cx="0" cy="-44" r="14" fill="#e4b98f"/><path d="M-15 -48 q 15 -22 30 0 z" fill="#4a3a2a"/><rect x="-11" y="12" width="9" height="30" rx="4" fill="#29251E" class="ds-leg l"/><rect x="2" y="12" width="9" height="30" rx="4" fill="#29251E" class="ds-leg r"/><path d="M-14 -16 q -14 10 -10 26" stroke="#e4b98f" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M14 -16 q 14 10 10 26" stroke="#e4b98f" stroke-width="7" stroke-linecap="round" fill="none"/></g>
-          <g class="ds-person ds-auntie" transform="translate(70 0)"><ellipse cx="0" cy="46" rx="22" ry="5" fill="#8d7340" opacity=".35"/><path d="M-14 -30 h28 l6 48 h-40z" fill="#b8962e"/><circle cx="0" cy="-44" r="14" fill="#efc9a4"/><path d="M-16 -46 q 16 -26 32 0 l -2 14 q -14 -8 -28 0z" fill="#3b2a1a"/><rect x="-11" y="14" width="9" height="28" rx="4" fill="#efc9a4" class="ds-leg l"/><rect x="2" y="14" width="9" height="28" rx="4" fill="#efc9a4" class="ds-leg r"/><path d="M-14 -16 q -14 10 -10 26" stroke="#efc9a4" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M14 -16 q 14 10 10 26" stroke="#efc9a4" stroke-width="7" stroke-linecap="round" fill="none"/>
-            <g class="ds-bottle" transform="translate(28 4)"><rect x="-7" y="-16" width="14" height="30" rx="4" fill="#e9f4fb" stroke="#7fa6c0" stroke-width="2"/><rect x="-4" y="-22" width="8" height="7" rx="2" fill="#7fa6c0"/><rect class="ds-water" x="-6" y="0" width="12" height="13" rx="3" fill="#5aa7d6"/></g></g>
+        <g class="ds-coolers" id="ds-coolers" opacity="0" style="isolation:isolate">
+          <g transform="translate(260 330)"><rect x="-14" y="-40" width="28" height="48" rx="5" fill="#f3efe6" stroke="#8a8378" stroke-width="2"/><rect x="-10" y="-56" width="20" height="18" rx="4" fill="#5aa7d6"/><rect x="-5" y="-6" width="10" height="6" fill="#8a8378"/><text class="ds-km" x="0" y="-64" text-anchor="middle" font-size="12" font-weight="700" fill="#4a4336">1 km</text></g>
+          <g transform="translate(520 334)"><rect x="-14" y="-40" width="28" height="48" rx="5" fill="#f3efe6" stroke="#8a8378" stroke-width="2"/><rect x="-10" y="-56" width="20" height="18" rx="4" fill="#5aa7d6"/><rect x="-5" y="-6" width="10" height="6" fill="#8a8378"/><text class="ds-km" x="0" y="-64" text-anchor="middle" font-size="12" font-weight="700" fill="#4a4336">2 km</text></g>
+          <g transform="translate(780 332)"><rect x="-14" y="-40" width="28" height="48" rx="5" fill="#f3efe6" stroke="#8a8378" stroke-width="2"/><rect x="-10" y="-56" width="20" height="18" rx="4" fill="#5aa7d6"/><rect x="-5" y="-6" width="10" height="6" fill="#8a8378"/><text class="ds-km" x="0" y="-64" text-anchor="middle" font-size="12" font-weight="700" fill="#4a4336">3 km</text></g>
         </g>
-        <g class="ds-coolers" id="ds-coolers" opacity="0">
-          <g transform="translate(120 318)"><rect x="-14" y="-40" width="28" height="48" rx="5" fill="#f3efe6" stroke="#8a8378" stroke-width="2"/><rect x="-10" y="-56" width="20" height="18" rx="4" fill="#5aa7d6"/><rect x="-5" y="-6" width="10" height="6" fill="#8a8378"/></g>
-          <g transform="translate(470 318)"><rect x="-14" y="-40" width="28" height="48" rx="5" fill="#f3efe6" stroke="#8a8378" stroke-width="2"/><rect x="-10" y="-56" width="20" height="18" rx="4" fill="#5aa7d6"/><rect x="-5" y="-6" width="10" height="6" fill="#8a8378"/></g>
-          <g transform="translate(790 322)"><rect x="-14" y="-40" width="28" height="48" rx="5" fill="#f3efe6" stroke="#8a8378" stroke-width="2"/><rect x="-10" y="-56" width="20" height="18" rx="4" fill="#5aa7d6"/><rect x="-5" y="-6" width="10" height="6" fill="#8a8378"/></g>
-          <text x="120" y="296" text-anchor="middle" font-size="12" font-weight="700" fill="#4a4336">1 km</text><text x="470" y="296" text-anchor="middle" font-size="12" font-weight="700" fill="#4a4336">2 km</text><text x="790" y="300" text-anchor="middle" font-size="12" font-weight="700" fill="#4a4336">3 km</text>
+        <g class="ds-walkers" id="ds-walkers" transform="translate(300 330)">
+          <g class="ds-person ds-uncle" transform="translate(0 0)"><ellipse cx="0" cy="46" rx="22" ry="5" fill="#8d7340" opacity=".3"/>
+<g class="ds-body"><rect x="-14" y="-30" width="28" height="44" rx="9" fill="#5b0302"/><circle cx="0" cy="-44" r="14" fill="#e4b98f"/><path d="M-15 -48 q 15 -22 30 0 z" fill="#4a3a2a"/>
+<g class="ds-face"><circle cx="-5" cy="-46" r="1.8" fill="#2a1d12"/><circle cx="5" cy="-46" r="1.8" fill="#2a1d12"/><path class="ds-mouth" d="M-5 -37 q 5 -4 10 0" stroke="#2a1d12" stroke-width="1.6" fill="none"/></g>
+<g class="ds-sweat"><path d="M-17 -50 q -3 6 0 8 q 3 -2 0 -8z" fill="#5aa7d6"/><path d="M17 -46 q -3 6 0 8 q 3 -2 0 -8z" fill="#5aa7d6"/><path d="M-19 -40 q -3 6 0 8 q 3 -2 0 -8z" fill="#5aa7d6"/></g>
+<rect x="-11" y="12" width="9" height="30" rx="4" fill="#29251E" class="ds-leg l"/><rect x="2" y="12" width="9" height="30" rx="4" fill="#29251E" class="ds-leg r"/>
+<path d="M-14 -16 q -14 10 -10 26" stroke="#e4b98f" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M14 -16 q 14 10 10 26" stroke="#e4b98f" stroke-width="7" stroke-linecap="round" fill="none"/></g></g>
+          <g class="ds-person ds-auntie" transform="translate(70 0)"><ellipse cx="0" cy="46" rx="22" ry="5" fill="#8d7340" opacity=".3"/>
+<g class="ds-body"><rect x="-14" y="-30" width="28" height="44" rx="9" fill="#b8962e"/><circle cx="0" cy="-44" r="14" fill="#efc9a4"/><path d="M-16 -46 q 16 -26 32 0 l -2 14 q -14 -8 -28 0z" fill="#3b2a1a"/>
+<g class="ds-face"><circle cx="-5" cy="-46" r="1.8" fill="#2a1d12"/><circle cx="5" cy="-46" r="1.8" fill="#2a1d12"/><path class="ds-mouth" d="M-5 -37 q 5 -4 10 0" stroke="#2a1d12" stroke-width="1.6" fill="none"/></g>
+<g class="ds-sweat"><path d="M-17 -50 q -3 6 0 8 q 3 -2 0 -8z" fill="#5aa7d6"/><path d="M17 -46 q -3 6 0 8 q 3 -2 0 -8z" fill="#5aa7d6"/><path d="M-19 -40 q -3 6 0 8 q 3 -2 0 -8z" fill="#5aa7d6"/></g>
+<rect x="-11" y="12" width="9" height="30" rx="4" fill="#29251E" class="ds-leg l"/><rect x="2" y="12" width="9" height="30" rx="4" fill="#29251E" class="ds-leg r"/>
+<path d="M-14 -16 q -14 10 -10 26" stroke="#efc9a4" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M14 -16 q 14 10 10 26" stroke="#efc9a4" stroke-width="7" stroke-linecap="round" fill="none"/></g></g>
+          <g class="ds-bottles" id="ds-bottles" transform="translate(112 -2)"></g>
         </g>
-        <g id="ds-rain" opacity="0"></g>
+        <g id="ds-tl" transform="translate(0 405)"><line x1="40" y1="0" x2="950" y2="0" stroke="#4a4336" stroke-width="2"/><path d="M950 -6 l12 6 l-12 6z" fill="#4a4336"/><g id="ds-tl-marks"></g></g>
         <text id="ds-caption" x="500" y="40" text-anchor="middle" font-size="22" font-weight="800" fill="#29251E" font-family="Montserrat,sans-serif"></text>
       </svg>
     </div>
@@ -2097,16 +2105,17 @@ render();
       <button type="button" class="ds-step on" data-s="0"><b>1 litre</b><span>How would you drink it?</span></button>
       <button type="button" class="ds-step" data-s="1"><b>5 litres</b><span>Still little by little?</span></button>
       <button type="button" class="ds-step" data-s="2"><b>10 litres</b><span>Still sparingly?</span></button>
-      <button type="button" class="ds-step cool" data-s="3"><b>💧 A water cooler every 1 km</b><span>Now how would you drink?</span></button>
-      <button type="button" class="ds-step money" data-s="4"><b>💰 Now in money</b><span>Lump sum vs passive income</span></button>
+      <button type="button" class="ds-step cool" data-s="3"><b>A water cooler every 1 km</b><span>Now how would you drink?</span></button>
+      <button type="button" class="ds-step money" data-s="4"><b>Now in money</b><span>Lump sum vs monthly income</span></button>
     </div>
     <div class="ds-say" id="ds-say"></div>
   </div>
   <div class="grid g2" style="margin-top:16px">
-    <div class="card"><h3>Lump sum retirement</h3><p>S$1 million, S$5 million, S$10 million in the bank. You still spend it sparingly, because you don't know where the desert ends. The question in your head is always: <b>do I have enough?</b></p></div>
-    <div class="card" style="border-color:var(--gold)"><h3>Passive income retirement</h3><p>S$5,000 arrives every month, like a water cooler every kilometre. The capital stays in the pot. The question in your head becomes: <b>how shall I spend this month's S$5,000?</b></p></div>
+    <div class="card"><h3>Lump sum retirement</h3><p>S$1 million, S$5 million, S$10 million in the bank. You still spend it sparingly, because you don't know how long the desert is. The question in your head is always: <b>do I have enough?</b></p></div>
+    <div class="card" style="border-color:var(--gold)"><h3>Monthly income retirement</h3><p>S$5,000 arrives every month, like a water cooler every kilometre, and the capital stays in the pot. The question becomes: <b>how shall I spend this month's S$5,000?</b></p></div>
   </div>
-  <p class="note" style="margin-top:10px">That is the difference between a lump sum and dividends paid to you from day one. See <b>Your income</b> for what your pot would pay, and <b>Your retirement gap</b> for how much you need. Dividends are not guaranteed; the pot can rise and fall.</p>
+  <div class="card" style="margin-top:12px"><h3>Longevity risk: the desert is longer than we think</h3><p>A 65-year-old in Singapore today can expect to live into their mid-80s, and many will see 90 or 100. Nobody knows their own number. A lump sum has to be rationed against an unknown; a monthly income does not. That is the whole point of the water coolers.</p><p class="note">Life expectancy at 65 is about 20 years for men and 24 for women in Singapore (Singapore Department of Statistics, Complete Life Tables 2024). General information, not a projection of any individual.</p></div>
+  <p class="note" style="margin-top:10px">See <b>Your income</b> for what your pot would pay each month, and <b>Your retirement gap</b> for how much you need. Dividends are not guaranteed; the pot can rise and fall.</p>
 </section>
 
 <section class="panel" id="t-d-gap" hidden>
@@ -4038,15 +4047,21 @@ const b=document.getElementById("persona-sw");if(b)b.addEventListener("click",()
 (function(){
 const $=s=>document.querySelector(s);const steps=[...document.querySelectorAll('.ds-step')];if(!steps.length)return;
 const SAY=[
- ["1 litre of water","Auntie, you have <b>1 litre</b> and you don't know where the desert ends. Do you drink it little by little, just in case? Or one shot? <b>Little by little, right.</b>",13],
- ["5 litres of water","Now you have <b>5 litres</b>. Same desert, same unknown ending. Still little by little, just in case it's not enough. <b>Right?</b>",22],
- ["10 litres of water","<b>10 litres</b> now. Would you drink freely? Still sparingly. Because you still don't know where the end is.",30],
- ["A water cooler every 1 km","Now, every 1 km you walk, there is a <b>water cooler</b>, and your bottle refills to 500 ml. How do you drink it now? <b>One shot.</b> Because you know the next one is coming.",30],
- ["Life is this desert","You have <b>S$1 million, S$5 million, S$10 million</b>, and you still spend it sparingly because you're scared it's not enough. But if <b>S$5,000 arrives every month</b>, your mind stops asking \"do I have enough?\" and starts asking <b>\"how shall I spend this?\"</b>",30]];
-function rain(on){const g=$('#ds-rain');g.innerHTML='';if(!on){g.setAttribute('opacity','0');return}g.setAttribute('opacity','1');let h='';for(let i=0;i<14;i++){const x=80+Math.random()*840,d=(Math.random()*1.6).toFixed(2);h+=`<text class="ds-drop" x="${x}" y="${120+Math.random()*120}" font-size="18" font-weight="800" fill="#b8962e" style="animation-delay:-${d}s">$</text>`}g.innerHTML=h}
-function go(n){steps.forEach(b=>b.classList.toggle('on',+b.dataset.s===n));const [cap,say,w]=SAY[n];$('#ds-caption').textContent=cap;$('#ds-say').innerHTML=say;
- const wtr=document.querySelector('.ds-water');wtr.setAttribute('height',w);wtr.setAttribute('y',13-w);
- $('#ds-coolers').setAttribute('opacity',n>=3?'1':'0');rain(n===4)}
+ ["1 litre of water, and no end in sight","Auntie, you have <b>1 litre</b> and you don't know where the desert ends. Do you drink it little by little, just in case? Or one shot? <b>Little by little, right.</b>",1],
+ ["5 litres of water, same desert","Now you have <b>5 litres</b>. Heavier to carry, but the ending is still unknown. Still little by little, just in case it's not enough. <b>Right?</b>",5],
+ ["10 litres of water, still rationing","<b>10 litres</b> now. Would you finally drink freely? Still sparingly. More water does not fix the problem, because you still don't know where the end is.",10],
+ ["A water cooler every 1 km","Now, every 1 km you walk, there is a <b>water cooler</b> and your bottle refills. How do you drink now? <b>One shot.</b> Because you know the next one is coming. Less water in hand, but no more fear.",1],
+ ["Life is this desert","You have <b>S$1 million, S$5 million, S$10 million</b>, and you still spend it sparingly because you're scared it's not enough. But if <b>S$5,000 arrives every month</b>, your mind stops asking \"do I have enough?\" and starts asking <b>\"how shall I spend this?\"</b>",1]];
+function bottles(n,fill){const g=$('#ds-bottles');let h='';const cols=n>5?5:n;for(let i=0;i<n;i++){const x=24+(i%cols)*16,y=-Math.floor(i/cols)*34;h+=`<g transform="translate(${x} ${y})"><rect x="-6" y="-14" width="12" height="28" rx="3" fill="#e9f4fb" stroke="#7fa6c0" stroke-width="1.5"/><rect x="-3" y="-19" width="6" height="6" rx="1.5" fill="#7fa6c0"/><rect class="${fill?'ds-cool-fill':''}" x="-5" y="${fill?0:4}" width="10" height="${fill?12:8}" rx="2" fill="#5aa7d6"/></g>`}g.innerHTML=h}
+function timeline(mode){const g=$('#ds-tl-marks');let h='';const ages=[65,70,75,80,85,90,95];ages.forEach((a,i)=>{const x=60+i*140;h+=`<line x1="${x}" y1="-6" x2="${x}" y2="6" stroke="#4a4336" stroke-width="2"/><text x="${x}" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#4a4336">${a}</text>`});
+ h+=`<text x="960" y="22" text-anchor="end" font-size="12" font-weight="800" fill="#8b0203">100?</text>`;
+ if(mode==='money'){for(let i=0;i<7;i++){const x=60+i*140;h+=`<text x="${x}" y="-12" text-anchor="middle" font-size="11" font-weight="800" fill="#2f7d4a">S$5,000 / mth</text>`}}
+ else if(mode==='route'){for(let i=0;i<7;i++){const x=60+i*140;h+=`<rect x="${x-4}" y="-22" width="8" height="10" rx="2" fill="#5aa7d6"/>`}}
+ else{h+=`<text x="500" y="-12" text-anchor="middle" font-size="12" font-weight="700" fill="#8b0203">how long is the desert? nobody knows</text>`}
+ g.innerHTML=h}
+function go(n){steps.forEach(b=>b.classList.toggle('on',+b.dataset.s===n));const [cap,say,nb]=SAY[n];$('#ds-caption').textContent=cap;$('#ds-say').innerHTML=say;
+ const sc=document.querySelector('.ds-scene');sc.classList.toggle('thirsty',n<=2);sc.classList.toggle('route',n>=3);
+ $('#ds-coolers').setAttribute('opacity',n>=3?'1':'0');bottles(nb,n>=3);timeline(n===4?'money':n===3?'route':'unknown')}
 steps.forEach(b=>b.addEventListener('click',()=>go(+b.dataset.s)));go(0);
 })();
 </script>
